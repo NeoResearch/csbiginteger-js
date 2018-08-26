@@ -1,0 +1,25 @@
+{
+  "name": "csbiginteger",
+  "version": "0.0.0",
+  "description": "C# BigInteger implementation on javascript",
+  "main": "csbiginteger.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igormcoelho/csBigInteger.js.git"
+  },
+  "keywords": [
+    "biginteger"
+  ],
+  "author": "Igor M. Coelho <igor.machado@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/igormcoelho/csBigInteger.js/issues"
+  },
+  "homepage": "https://github.com/igormcoelho/csBigInteger.js#readme",
+  "devDependencies": {
+    "jest": "^23.5.0"
+  }
+}
