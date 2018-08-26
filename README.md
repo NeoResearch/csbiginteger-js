@@ -22,6 +22,11 @@ Some auxiliar functions are also provided, regarding Fixed8 format.
 
 `npm publish`
 
-## License MIT
+## Final remarks
+
+
+Main maintainer is @igormcoelho.  Thanks a lot to @snowypowers for the good advices!
+
+MIT License
 
 Copyleft 2018
