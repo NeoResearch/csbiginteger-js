@@ -48,7 +48,7 @@
 
 		<parse>, <csBigInteger>
 */
-function csBigInteger(n) {
+function csBigInteger(n, base = 10) {
     //console.log("n="+n);
 		//console.log("typeof n="+(typeof n));
 		//console.log(Object.prototype.toString.call(n));
@@ -59,7 +59,7 @@ function csBigInteger(n) {
     //else if (typeof n === "number")
 		//	this._data = n;
     else if ((typeof n === "string") || (Object.prototype.toString.call(n) === '[object Array]'))
-      return csBigInteger.parse(n);
+      return csBigInteger.parse(n, base);
 
   //console.log("default assign n="+n);
 	this._data = n; // assign anyway (should be 'number')
@@ -138,10 +138,10 @@ csBigInteger.prototype.toString = function(base=10) {
 
 /*
 	Function: parse
-	Parse a string or byte array into a <csBigInteger>.
+	Parse a string or big-endian byte array into a <csBigInteger>.
 
 	- "0x" or "0X": *base* = 16
-	- "0_": *base* = 2
+	- "0b": *base* = 2 (?)
 	- else: *base* = 10
 
 	Parameters:
@@ -155,8 +155,9 @@ csBigInteger.prototype.toString = function(base=10) {
 */
 csBigInteger.parse = function(n, base = 10) {
 	if(Object.prototype.toString.call(n) === '[object Array]') {
-	  s = "0x";
-		for(i=0;i<n.length;i++) {
+	  //s = "0x";
+		s = "";
+		for(var i=0;i<n.length;i++) {
 			var dig = n[i].toString(16);
 			if(dig.length==1)
 				dig = "0"+dig;
@@ -167,10 +168,52 @@ csBigInteger.parse = function(n, base = 10) {
 
 	var s = n.toString();
 
-  var num = parseInt(s, base);
+  if(base == 10)
+    return new csBigInteger(parseInt(s, 10));
 
-  return new csBigInteger(num);
+	//console.log("base 16 conv:"+s);
+
+  // base 16
+	return new csBigInteger(csBigInteger.behex2bigint(s));
 };
+
+csBigInteger.revertHexString = function (hex) {
+    var reverthex = "";
+    for (var i = 0; i < hex.length - 1; i += 2)
+        reverthex = "" + hex.substr(i, 2) + reverthex;
+    return reverthex;
+};
+
+csBigInteger.behex2bigint = function (behex) {
+  var x = behex;
+  // if needs padding
+  if(x.length % 2 == 1)
+    x = '0'+x;
+  // check negative bit
+  var y = x.slice(x.length-2,x.length+2);
+  //console.log("base="+y);
+  // detect negative values
+  var bitnum = parseInt(y, 16).toString(2);
+  //console.log("bitnum="+bitnum);
+  // -1389293829382
+  if((bitnum.length == 8) && (bitnum[0]=="1")) {
+    // negative number
+      //console.log("negative!");
+      //console.log(behex);
+      var rbitnum = parseInt(csBigInteger.revertHexString(behex),16).toString(2);
+      // negate bits
+      var y2 = "";
+      for(var i = 0; i<rbitnum.length; i++)
+         y2 += rbitnum[i]=='0'?'1':'0';
+      var finalnum = -1*(parseInt(y2, 2) + 1);
+      return finalnum;
+  }
+  else {
+    // positive number: positive is easy, just revert and convert to int (TODO: beware javascript natural precision loss)
+    return parseInt(csBigInteger.revertHexString(behex), 16);
+  }
+}
+
 
 /*
 	Function: toByteArray
