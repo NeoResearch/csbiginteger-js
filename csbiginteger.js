@@ -225,12 +225,13 @@ csBigInteger.behex2bigint = function (behex) {
 
 		a big-endian byte array instance.
 */
-csBigInteger.toByteArray = function() {
+csBigInteger.prototype.toByteArray = function() {
 	//console.log("toByteArray = "+this._data);
-	if(this._data >= 0)
-		return this.positiveToByteArray();
-	else
-		return this.negativeToByteArray();
+	var hval = this.toHexString();
+	var array = [];
+	for (var i = 0; i < hval.length - 1; i += 2)
+			array.push(parseInt(hval.substr(i, 2), 16));
+  return array;
 };
 
 /*
@@ -321,65 +322,6 @@ csBigInteger.negbigint2behex = function (intvalue) {
 
    return csBigInteger.revertHexString(y5); // big endian
 }
-
-/*
-	Function: positiveToByteArray
-	Parse a positive (or zero) base-10 number into a <csBigInteger>.
-
-	Returns:
-
-    a big-endian byte array
-*/
-csBigInteger.positiveToByteArray = function() {
-	var intvalue = this._data;
-  // big-endian byte array
-  var data = [];
-  // guarantee value is non-negative
-  if(intvalue < 0)
-     intvalue = 0;
-  //console.log("intvalue="+intvalue);
-  // int to hexstring
-  var hval = intvalue.toString(16);
-  // padding
-  if(hval.length % 2 == 1)
-     hval = "0"+hval;
-  // hexstring to big-endian byte array
-  for (var i = 0; i < hval.length - 1; i += 2)
-      data.push(parseInt(hval.substr(i, 2), 16));
-
-  return data;
-};
-
-
-/*
-	Function: negativeToByteArray
-	Parse a negative base-10 number into a <csBigInteger>.
-
-	Returns:
-
-		a big-endian byte array.
-*/
-csBigInteger.negativeToByteArray = function() {
-	var intvalue = this._data;
-  // big-endian byte array
-  var data = [];
-  // guarantee value is non-negative
-  if(intvalue >= 0)
-     return ZERO;
-
-  //console.log("intvalue="+intvalue);
-  // int to hexstring
-  var hval = intvalue.toString(16);
-  // padding
-  if(hval.length % 2 == 1)
-     hval = "0"+hval;
-  // hexstring to big-endian byte array
-  for (var i = 0; i < hval.length - 1; i += 2)
-      data.push(parseInt(hval.substr(i, 2), 16));
-
-  return data;
-};
-
 
 /*
 	Function: valueOf

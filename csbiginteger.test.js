@@ -194,3 +194,15 @@ test('constructor csBigInteger(1000000).toHexString() equals "40420f00"', () => 
 test('constructor csBigInteger(4293967296).toHexString() equals "c0bdf0ff00"', () => {
   expect(new csBigInteger(4293967296).toHexString()).toBe("c0bdf0ff00");
 });
+
+test('constructor csBigInteger(10).toHexString() equals [10, 0]', () => {
+  expect(new csBigInteger(10).toByteArray()).toEqual([10, 0]);
+});
+
+test('constructor csBigInteger(-1).toHexString() equals [255]', () => {
+  expect(new csBigInteger(-1).toByteArray()).toEqual([255]);
+});
+
+test('constructor csBigInteger(0).toHexString() equals [0, 0]', () => {
+  expect(new csBigInteger(0).toByteArray()).toEqual([0, 0]);
+});
