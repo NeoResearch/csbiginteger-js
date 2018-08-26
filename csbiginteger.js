@@ -186,19 +186,24 @@ csBigInteger.revertHexString = function (hex) {
     return reverthex;
 };
 
-csBigInteger.behex2bigint = function (behex) {
-  var x = behex;
-  // if needs padding
-  if(x.length % 2 == 1)
-    x = '0'+x;
-  // check negative bit
+csBigInteger.checkNegativeBit = function(x) {
+	// check negative bit
   var y = x.slice(x.length-2,x.length+2);
   //console.log("base="+y);
   // detect negative values
   var bitnum = parseInt(y, 16).toString(2);
   //console.log("bitnum="+bitnum);
   // -1389293829382
-  if((bitnum.length == 8) && (bitnum[0]=="1")) {
+  return (bitnum.length == 8) && (bitnum[0]=="1");
+}
+
+csBigInteger.behex2bigint = function (behex) {
+  var x = behex;
+  // if needs padding
+  if(x.length % 2 == 1)
+    x = '0'+x;
+  // verify if number is negative
+  if(csBigInteger.checkNegativeBit(x)) {
     // negative number
       //console.log("negative!");
       //console.log(behex);
@@ -248,7 +253,10 @@ csBigInteger.prototype.toHexString = function() {
 		 var bihex = bigint.toString(16);
 		 if(bihex.length % 2 == 1)
 				bihex = "0"+bihex;
-		 return csBigInteger.revertHexString("00"+bihex); // '00' only really necessary in a few cases... TODO: improve that
+		 bihex = csBigInteger.revertHexString(bihex); // to big-endian
+		 if(csBigInteger.checkNegativeBit(bihex))
+		 	  bihex = bihex+"00";
+		 return bihex;
 	}
 	else
 		 return csBigInteger.negbigint2behex(bigint);
