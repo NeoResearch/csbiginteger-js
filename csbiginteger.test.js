@@ -206,3 +206,7 @@ test('constructor csBigInteger(-1).toHexString() equals [255]', () => {
 test('constructor csBigInteger(0).toHexString() equals [0]', () => {
   expect(new csBigInteger(0).toByteArray()).toEqual([0]);
 });
+
+test('csBigInteger(100000000).toHexString() equals "00e1f505"', () => {
+  expect(new csBigInteger(100000000).toHexString()).toEqual("00e1f505");
+});
