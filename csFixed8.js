@@ -7,7 +7,7 @@
 (function(exports) {
 "use strict";
 
-const csBigInteger = require('csbiginteger').csBigInteger;
+const csBigInteger = require('./csBigInteger').csBigInteger;
 
 // csFixed8 allows biginteger and decimal number as input
 
