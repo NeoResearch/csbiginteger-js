@@ -62,7 +62,7 @@ function csBigInteger(n, base = 10) {
       return csBigInteger.parse(n, base);
 
   //console.log("default assign n="+n);
-	this._data = n; // assign anyway (should be 'number')
+	this._data = Math.round(n); // assign anyway (should be 'number'). ensure it's really integer, not fractional
 }
 
 csBigInteger._construct = function(n) {

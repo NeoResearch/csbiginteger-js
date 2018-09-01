@@ -210,3 +210,7 @@ test('constructor csBigInteger(0).toHexString() equals [0]', () => {
 test('csBigInteger(100000000).toHexString() equals "00e1f505"', () => {
   expect(new csBigInteger(100000000).toHexString()).toEqual("00e1f505");
 });
+
+test('test 255: csBigInteger(0.00000255*100000000).toHexString() equals "ff00"', () => {
+  expect(new csBigInteger(0.00000255*100000000).toHexString()).toEqual("ff00");
+});
