@@ -1,4 +1,5 @@
-const csFixed8 = require('./csFixed8').csFixed8;
+//const csFixed8 = require('./csFixed8').csFixed8;
+import {csFixed8} from './csFixed8';
 
 test('constructor csFixed8(0.0) equals big-endian "0000000000000000"', () => {
   expect(new csFixed8(0.0).toHexString()).toBe("0000000000000000");

@@ -21,5 +21,8 @@
   "homepage": "https://github.com/igormcoelho/csBigInteger.js#readme",
   "devDependencies": {
     "jest": "^23.5.0"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.1"
   }
 }
