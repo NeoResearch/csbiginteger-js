@@ -4,8 +4,9 @@
   "description": "C# BigInteger implementation on javascript",
   "main": "lib/csbiginteger.js",
   "scripts": {
-    "test": "./node_modules/.bin/jest lib",
-    "build": "./node_modules/.bin/babel src -d lib && ./node_modules/.bin/browserify lib/csbiginteger.js -o csbiginteger.js"
+    "test": "./node_modules/.bin/jest",
+    "browserify_old": "./node_modules/.bin/babel src -d lib && ./node_modules/.bin/browserify --no-bundle-external lib/csbiginteger.js -o bundle.js",
+    "build" : "./node_modules/.bin/webpack"
   },
   "repository": {
     "type": "git",
@@ -23,12 +24,14 @@
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-preset-env": "^1.7.0",
-    "jest": "^23.5.0"
+    "jest": "^23.5.0",
+    "webpack-cli": "^3.1.1"
   },
   "dependencies": {
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
-    "browserify": "^16.2.2"
+    "browserify": "^16.2.2",
+    "webpack": "^4.19.1"
   }
 }

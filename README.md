@@ -12,6 +12,10 @@ Some auxiliar functions are also provided, regarding Fixed8 format.
 
 `npm test`
 
+## Build Webpack
+
+`npm run build`
+
 ## New minor version
 
 `npm version minor`
