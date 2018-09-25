@@ -13,7 +13,7 @@ const csFixed8 = require('./csFixed8').csFixed8;
 //exports.csBigInteger = csBigInteger;
 //exports.csFixed8 = csFixed8;
 
-export {
+module.exports = {
   csBigInteger,
   csFixed8
 }
