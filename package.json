@@ -1,12 +1,12 @@
 {
   "name": "csbiginteger",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "C# BigInteger implementation on javascript",
   "main": "lib/csbiginteger.js",
   "scripts": {
     "test": "./node_modules/.bin/jest",
     "browserify_old": "./node_modules/.bin/babel src -d lib && ./node_modules/.bin/browserify --no-bundle-external lib/csbiginteger.js -o bundle.js",
-    "build" : "./node_modules/.bin/webpack"
+    "build": "./node_modules/.bin/webpack"
   },
   "repository": {
     "type": "git",
