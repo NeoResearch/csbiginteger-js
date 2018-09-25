@@ -1,5 +1,5 @@
-//const csBigInteger = require('./csbiginteger').csBigInteger;
-import {csBigInteger} from './csBigInteger';
+const csBigInteger = require('./csBigInteger').csBigInteger;
+//import {csBigInteger} from './csBigInteger';
 
 test('constructor csBigInteger() equals zero', () => {
   expect(new csBigInteger().valueOf()).toBe(0);
