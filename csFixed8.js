@@ -1,8 +1,8 @@
-// csFixed8 implementation based on csbiginteger class, and C# big-endian format
+// csFixed8 implementation based on csbiginteger class, and C# little-endian format
 // csFixed8 considers 8 decimal digits.
 // Positive numbers are represented as exactly 8 bytes (64 bits), but negative numbers can have less.
-//  1.0 -> 0000000005f5e100  (little-endian)
-// -1.0 -> ff (little-endian)
+//  1.00000000 -> 0x0000000005f5e100 (big-endian) / 00e1f50500 (little-endian)
+// -1.00000000 -> 001f0afa (little-endian)
 
 (function(exports) {
 "use strict";
@@ -52,7 +52,7 @@ csFixed8.MinValue  = MinValue;
 
 csFixed8.Satoshi  = Satoshi;
 
-// hexstring in big-endian format. If wanting little endian, use toString() method.
+// hexstring in little-endian format. If wanting big-endian, use toString() method.
 // non-negative (positive and zero) display exactly 8 bytes. Negative can have less than 8 bytes (but most significant bit will always be set)
 csFixed8.prototype.toHexString = function() {
   var hs = this._data.toHexString();
@@ -62,7 +62,7 @@ csFixed8.prototype.toHexString = function() {
   return hs;
 }
 
-// toString presents hex in little-endian format. If big-endian is wanted, use toHexString() function
+// toString presents hex in big-endian format, starting with "0x" marker. If little-endian is wanted, use toHexString() function
 // non-negative (positive and zero) display exactly 8 bytes. Negative can have less than 8 bytes (but most significant bit will always be set)
 csFixed8.prototype.toString = function(base=10) {
   // allowing bases 2, 10 and 16
@@ -73,8 +73,10 @@ csFixed8.prototype.toString = function(base=10) {
 	if (base == 10)
 	  return (this._data/D).toString(); // decimal format
 
-  if(base == 16) // little-endian hexstring
-    return csBigInteger.revertHexString(this.toHexString());
+  if(base == 16) {
+    // big-endian hexstring starting with "0x"
+    return "0x"+csBigInteger.revertHexString(this.toHexString());
+  }
 
   return "?";
 };

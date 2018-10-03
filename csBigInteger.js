@@ -192,7 +192,10 @@ csBigInteger.revertHexString = function (hex) {
 };
 
 // checkNegativeBit returns true if hex string is negative (meaning that last bit is set)
-// Example: checkNegativeBit("ff") is true, but checkNegativeBit("7f") is false
+// Examples:
+// checkNegativeBit("ff") is true
+// checkNegativeBit("7f") is false
+// checkNegativeBit("ff00") is false
 csBigInteger.checkNegativeBit = function(leHexStr) {
 	// check negative bit
   var y = leHexStr.slice(leHexStr.length-2, leHexStr.length+2);
