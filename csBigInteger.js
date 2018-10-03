@@ -25,7 +25,7 @@
 	> var n3 = csBigInteger(n2);    // Return n2, unchanged (immutable)
 
 	The constructor form only takes a value *n* that must be a number, string or
-	bytearray of numbers (0..255) in big-endian order.
+	bytearray of numbers (0..255) in little-endian order.
   The array is *not copied and
 	may be modified*. If the array contains only zeros, the sign parameter
 	is ignored and is forced to zero.
@@ -35,6 +35,9 @@
   > var n2 = csBigInteger([128]);   // Create a new <csBigInteger> with value -128
   > new csBigInteger([251]): create a new csBigInteger with value -5 (fb)
   > new csBigInteger([251, 0]): create a new csBigInteger with value 251 (fb00)
+
+	The hexstring is passed on little-endian order, with parameter 16.
+	> new csBigInteger("fb00", 16): create a new csBigInteger with value 251
 
 	Parameters:
 
@@ -138,7 +141,7 @@ csBigInteger.prototype.toString = function(base=10) {
 
 /*
 	Function: parse
-	Parse a string or big-endian byte array into a <csBigInteger>.
+	Parse a string or little-endian byte array into a <csBigInteger>.
 
 	- "0x" or "0X": *base* = 16
 	- "0b": *base* = 2 (?)
@@ -176,9 +179,11 @@ csBigInteger.parse = function(n, base = 10) {
 	// console.log("base 16 conv:"+s);
 
   // base 16
-	return new csBigInteger(csBigInteger.behex2bigint(s));
+	return new csBigInteger(csBigInteger.lehex2bigint(s));
 };
 
+
+// invert hexstring (little/big endians)
 csBigInteger.revertHexString = function (hex) {
     var reverthex = "";
     for (var i = 0; i < hex.length - 1; i += 2)
@@ -186,9 +191,11 @@ csBigInteger.revertHexString = function (hex) {
     return reverthex;
 };
 
-csBigInteger.checkNegativeBit = function(x) {
+// checkNegativeBit returns true if hex string is negative (meaning that last bit is set)
+// Example: checkNegativeBit("ff") is true, but checkNegativeBit("7f") is false
+csBigInteger.checkNegativeBit = function(leHexStr) {
 	// check negative bit
-  var y = x.slice(x.length-2,x.length+2);
+  var y = leHexStr.slice(leHexStr.length-2, leHexStr.length+2);
   //console.log("base="+y);
   // detect negative values
   var bitnum = parseInt(y, 16).toString(2);
@@ -197,8 +204,9 @@ csBigInteger.checkNegativeBit = function(x) {
   return (bitnum.length == 8) && (bitnum[0]=="1");
 }
 
-csBigInteger.behex2bigint = function (behex) {
-  var x = behex;
+// Little-endian hexstring to javascript big integer (TODO: beware javascript natural precision loss)
+csBigInteger.lehex2bigint = function (lehex) {
+  var x = lehex;
   // if needs padding
   if(x.length % 2 == 1)
     x = '0'+x;
@@ -207,7 +215,7 @@ csBigInteger.behex2bigint = function (behex) {
     // negative number
       //console.log("negative!");
       //console.log(behex);
-      var rbitnum = parseInt(csBigInteger.revertHexString(behex),16).toString(2);
+      var rbitnum = parseInt(csBigInteger.revertHexString(lehex),16).toString(2);
       // negate bits
       var y2 = "";
       for(var i = 0; i<rbitnum.length; i++)
@@ -217,14 +225,14 @@ csBigInteger.behex2bigint = function (behex) {
   }
   else {
     // positive number: positive is easy, just revert and convert to int (TODO: beware javascript natural precision loss)
-    return parseInt(csBigInteger.revertHexString(behex), 16);
+    return parseInt(csBigInteger.revertHexString(lehex), 16);
   }
 }
 
 
 /*
 	Function: toByteArray
-	Converts the biginteger value to big-endian byte array
+	Converts the biginteger value to little-endian byte array
 
 	Returns:
 
@@ -241,11 +249,11 @@ csBigInteger.prototype.toByteArray = function() {
 
 /*
 	Function: tohexString
-	Converts the biginteger value to big-endian hexstring
+	Converts the biginteger value to little-endian hexstring
 
 	Returns:
 
-		a big-endian hex string
+		a little-endian hex string
 */
 csBigInteger.prototype.toHexString = function() {
 	var bigint = this._data;
@@ -259,12 +267,12 @@ csBigInteger.prototype.toHexString = function() {
 		 return bihex;
 	}
 	else
-		 return csBigInteger.negbigint2behex(bigint);
+		 return csBigInteger.negbigint2lehex(bigint);
 };
 
 
 // negative big integers returned as (big-endian) hex
-csBigInteger.negbigint2behex = function (intvalue) {
+csBigInteger.negbigint2lehex = function (intvalue) {
    if(intvalue >= 0) // ONLY NEGATIVE!
       return null;
    var x = intvalue;

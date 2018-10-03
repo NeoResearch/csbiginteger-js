@@ -215,3 +215,23 @@ test('csBigInteger(100000000).toHexString() equals "00e1f505"', () => {
 test('test 255: csBigInteger(0.00000255*100000000).toHexString() equals "ff00"', () => {
   expect(new csBigInteger(0.00000255*100000000).toHexString()).toEqual("ff00");
 });
+
+test('constructor csBigInteger.checkNegativeBit("ff") is true', () => {
+  expect(csBigInteger.checkNegativeBit("ff")).toBe(true);
+});
+
+test('constructor csBigInteger.checkNegativeBit("7f") is false', () => {
+  expect(csBigInteger.checkNegativeBit("7f")).toBe(false);
+});
+
+test('constructor csBigInteger.checkNegativeBit("80") is true', () => {
+  expect(csBigInteger.checkNegativeBit("80")).toBe(true);
+});
+
+test('constructor csBigInteger.checkNegativeBit("800") is false', () => {
+  expect(csBigInteger.checkNegativeBit("800")).toBe(false);
+});
+
+test('constructor csBigInteger.checkNegativeBit("8000") is false', () => {
+  expect(csBigInteger.checkNegativeBit("8000")).toBe(false);
+});
