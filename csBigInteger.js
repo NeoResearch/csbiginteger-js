@@ -104,33 +104,36 @@ csBigInteger._1 = ONE;
 
 	Parameters:
 
-		base - Optional base to represent the number in (default is base 10).
-		       Must be between 2 and 36 inclusive, or an Error will be thrown.
+		base - Optional base to represent the number in (default is base 10, but can be 2 or 16).
+					 base 16 will start with prefix "0x", and will represent a big-endian hex string.
 
 	Returns:
 
 		The string representation of the <csBigInteger>.
 */
 csBigInteger.prototype.toString = function(base=10) {
+	// get little endian byte array
+	var data = this.toByteArray();
   // allowing bases 2, 10 and 16
   if (!((base == 2) || (base == 10) || (base == 16))) {
 		throw new Error("illegal radix " + base + ".");
 	}
 
-	if (base === 10)
+	if (base == 10)
 	  return this._data.toString();
 
 	var shex = "";
-	for (var i = this._data.length - 1; i >= 0; i--) {
-		var sbyte = this._data[i].toString(16);
+	for (var i = data.length - 1; i >= 0; i--) {
+
+		var sbyte = data[i].toString(16);
 		if(sbyte.length < 2)
 			sbyte = "0"+sbyte;
 		shex += sbyte;
 	}
 
-  if(base === 16) {
+  if(base == 16) {
     // hexstring
-    return shex;
+    return "0x"+shex;
   }
 	else {
     // binary
@@ -185,6 +188,10 @@ csBigInteger.parse = function(n, base = 10) {
 
 // invert hexstring (little/big endians)
 csBigInteger.revertHexString = function (hex) {
+		// if needs padding
+  	if(hex.length % 2 == 1)
+    	hex = '0'+hex; // TODO: beware if that makes sense for negative... perhaps 'f' is better
+
     var reverthex = "";
     for (var i = 0; i < hex.length - 1; i += 2)
         reverthex = "" + hex.substr(i, 2) + reverthex;
@@ -207,18 +214,32 @@ csBigInteger.checkNegativeBit = function(leHexStr) {
   return (bitnum.length == 8) && (bitnum[0]=="1");
 }
 
-// Little-endian hexstring to javascript big integer (TODO: beware javascript natural precision loss)
+// hexstring to javascript big integer (TODO: beware javascript natural precision loss)
+// if prefix is "0x", considered big-endian. Example: "0x0107" is decimal 263
+// otherwise, considered little-endian. Example: "0107" is decimal 1793
 csBigInteger.lehex2bigint = function (lehex) {
   var x = lehex;
+	if((x.length >= 2) && (x[0]=="0") && (x[1]=="x")) {
+		// big-endian
+		x = x.substr(2);
+		// convert to little-endian
+		x = csBigInteger.revertHexString(x);
+	}
+
   // if needs padding
   if(x.length % 2 == 1)
-    x = '0'+x;
+    x = '0'+x; // TODO: beware if that makes sense for negative... perhaps 'f' is better
   // verify if number is negative
   if(csBigInteger.checkNegativeBit(x)) {
     // negative number
       //console.log("negative!");
       //console.log(behex);
-      var rbitnum = parseInt(csBigInteger.revertHexString(lehex),16).toString(2);
+			var vint = parseInt(csBigInteger.revertHexString(lehex),16);
+			if(!Number.isSafeInteger(vint)) {
+				console.log("Precision loss! aborting");
+				return NaN;
+			}
+      var rbitnum = vint.toString(2);
       // negate bits
       var y2 = "";
       for(var i = 0; i<rbitnum.length; i++)
