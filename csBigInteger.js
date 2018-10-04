@@ -1,6 +1,6 @@
 // C# Big Integer implementation on javascript
 // Igor M. Coelho, Copyleft 2018 - MIT License
-// This class sketch was heavily inspired by http://silentmatt.com/biginteger
+// This class sketch was initially inspired by http://silentmatt.com/biginteger
 // Although the objective is not to provide top performance (C# compatibility comes first),
 // it's important to inherit a good design ;)
 
@@ -38,6 +38,9 @@
 
 	The hexstring is passed on little-endian order, with parameter 16.
 	> new csBigInteger("fb00", 16): create a new csBigInteger with value 251
+
+	The hexstring can also be passed on big-endian order, with parameter 16, starting with prefix "0x".
+	> new csBigInteger("0x00fb", 16): create a new csBigInteger with value 251
 
 	Parameters:
 
@@ -234,9 +237,9 @@ csBigInteger.lehex2bigint = function (lehex) {
     // negative number
       //console.log("negative!");
       //console.log(behex);
-			var vint = parseInt(csBigInteger.revertHexString(lehex),16);
+			var vint = parseInt(csBigInteger.revertHexString(x),16);
 			if(!Number.isSafeInteger(vint)) {
-				console.log("Precision loss! aborting");
+				//console.log("Precision loss! aborting");
 				return NaN;
 			}
       var rbitnum = vint.toString(2);
@@ -249,7 +252,10 @@ csBigInteger.lehex2bigint = function (lehex) {
   }
   else {
     // positive number: positive is easy, just revert and convert to int (TODO: beware javascript natural precision loss)
-    return parseInt(csBigInteger.revertHexString(lehex), 16);
+		var vint = parseInt(csBigInteger.revertHexString(x), 16);
+		if(!Number.isSafeInteger(vint))
+			return NaN;
+    return vint;
   }
 }
 

@@ -383,3 +383,38 @@ test('constructor csBigInteger("c0bdf0ff",16).valueOf() equals -1000000', () => 
 test('constructor csBigInteger("c0bdf0ffffff",16).valueOf() equals -1000000', () => {
   expect(new csBigInteger("c0bdf0ffffff",16).valueOf()).toBe(-1000000);
 });
+
+// ====================================================================
+//   big-endian input with "0x"
+
+test('constructor csBigInteger("00", 16) equals 0', () => {
+  expect(new csBigInteger("00", 16).valueOf()).toBe(0);
+});
+
+test('constructor csBigInteger("0x00", 16) equals 0', () => {
+  expect(new csBigInteger("0x00", 16).valueOf()).toBe(0);
+});
+
+test('constructor csBigInteger("01", 16) equals 1', () => {
+  expect(new csBigInteger("01", 16).valueOf()).toBe(1);
+});
+
+test('constructor csBigInteger("0x01", 16) equals 1', () => {
+  expect(new csBigInteger("0x01", 16).valueOf()).toBe(1);
+});
+
+test('constructor csBigInteger("fb", 16) equals -5', () => {
+  expect(new csBigInteger("fb", 16).valueOf()).toBe(-5);
+});
+
+test('constructor csBigInteger("0xfb", 16) equals -5', () => {
+  expect(new csBigInteger("0xfb", 16).valueOf()).toBe(-5);
+});
+
+test('constructor csBigInteger("fb00", 16) equals 251', () => {
+  expect(new csBigInteger("fb00", 16).valueOf()).toBe(251);
+});
+
+test('constructor csBigInteger("0x00fb", 16) equals 251', () => {
+  expect(new csBigInteger("0x00fb", 16).valueOf()).toBe(251);
+});
