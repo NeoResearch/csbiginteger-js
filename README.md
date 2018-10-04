@@ -50,7 +50,7 @@ const csBigInteger = require('csbiginteger').csBigInteger;
 ## Final remarks
 
 
-Main maintainer is @igormcoelho.  Thanks a lot to @snowypowers for the good advices!
+Main maintainer is @igormcoelho.  Thanks a lot to @snowypowers for the good advices and @ixje on endianess discussions.
 
 MIT License
 
