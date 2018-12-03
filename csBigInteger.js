@@ -398,6 +398,11 @@ csBigInteger.prototype.valueOf = function() {
 	return jsNum; // number is safe
 };
 
+// returns internal Big Number
+csBigInteger.prototype.asBN = function() {
+	return this._data;
+};
+
 exports.csBigInteger = csBigInteger;
 })(typeof exports !== 'undefined' ? exports : this);
 

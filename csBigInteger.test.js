@@ -1,4 +1,5 @@
 const csBigInteger = require('./csBigInteger').csBigInteger;
+const BN = require('bn.js');
 //import {csBigInteger} from './csBigInteger';
 
 test('constructor csBigInteger() equals zero', () => {
@@ -435,4 +436,10 @@ test('csBigInteger(-9007199254740991) equals -9007199254740991 (number is safe f
 
 test('csBigInteger(-9007199254740992) to throw exception (number is unsafe for JavaScript)', () => {
   expect( function(){ new csBigInteger(-9007199254740992).valueOf() }).toThrow(new Error("csBigInteger assertion failed: unsafe number"));
+});
+
+// =============== testing internal BN library ===================
+
+test('csBigInteger(BN(100)) equals 100', () => {
+  expect(new csBigInteger(new BN(100)).asBN().toNumber()).toBe(100);
 });
