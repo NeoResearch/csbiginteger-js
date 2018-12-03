@@ -4,7 +4,7 @@ module.exports = {
   output: {
     library: 'csbiginteger',
     libraryTarget: 'umd',
-    filename: './bundle.js',
-    auxiliaryComment: 'Test Comment'
+    filename: './csbiginteger.js',
+    auxiliaryComment: 'csBigInteger.js library'
   }
 };

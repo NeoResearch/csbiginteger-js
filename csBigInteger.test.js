@@ -418,3 +418,21 @@ test('constructor csBigInteger("fb00", 16) equals 251', () => {
 test('constructor csBigInteger("0x00fb", 16) equals 251', () => {
   expect(new csBigInteger("0x00fb", 16).valueOf()).toBe(251);
 });
+
+// =============== testing javascript number limits (more than 53 bits) =======
+
+test('csBigInteger(9007199254740991) equals 9007199254740991 (number is safe for JavaScript)', () => {
+  expect(new csBigInteger(9007199254740991).valueOf()).toBe(9007199254740991);
+});
+
+test('csBigInteger(9007199254740992) to throw exception (number is unsafe for JavaScript)', () => {
+  expect( function(){ new csBigInteger(9007199254740992).valueOf() }).toThrow(new Error("csBigInteger assertion failed: unsafe number"));
+});
+
+test('csBigInteger(-9007199254740991) equals -9007199254740991 (number is safe for JavaScript)', () => {
+  expect(new csBigInteger(-9007199254740991).valueOf()).toBe(-9007199254740991);
+});
+
+test('csBigInteger(-9007199254740992) to throw exception (number is unsafe for JavaScript)', () => {
+  expect( function(){ new csBigInteger(-9007199254740992).valueOf() }).toThrow(new Error("csBigInteger assertion failed: unsafe number"));
+});

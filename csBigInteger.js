@@ -7,6 +7,14 @@
 (function(exports) {
 "use strict";
 
+// storing internal information on javascript BN library
+const BN = require('bn.js');
+
+// function utils
+function assert(val, msg) {
+	if (!val) throw new Error(msg || 'Assertion failed');
+}
+
 /*
 	Constructor: csBigInteger()
 	Convert a value to a <csBigInteger>.
@@ -55,20 +63,19 @@
 		<parse>, <csBigInteger>
 */
 function csBigInteger(n, base = 10) {
-    //console.log("n="+n);
-		//console.log("typeof n="+(typeof n));
-		//console.log(Object.prototype.toString.call(n));
 		if (n instanceof csBigInteger)
-			return n;
+			return n; // immutable
 		else if (typeof n === "undefined")
-			return ZERO;
-    //else if (typeof n === "number")
-		//	this._data = n;
+			return ZERO; // empty constructor: csBigInteger()
     else if ((typeof n === "string") || (Object.prototype.toString.call(n) === '[object Array]'))
       return csBigInteger.parse(n, base);
-
-  //console.log("default assign n="+n);
-	this._data = Math.round(n); // assign anyway (should be 'number'). ensure it's really integer, not fractional
+		else if (typeof n === "BN")
+			this._data = n; // big number
+		else { // (typeof n === "number")
+		  var jsNum = Math.round(n); // will round it to integer
+			assert(Number.isSafeInteger(jsNum), "csBigInteger assertion failed: unsafe number");
+			this._data = new BN(Math.round(jsNum)); // assuming JavaScript number
+		}
 }
 
 csBigInteger._construct = function(n) {
@@ -374,7 +381,7 @@ csBigInteger.negbigint2lehex = function (intvalue) {
 	Convert a <csBigInteger> to a native JavaScript integer.
 
 	This is called automatically by JavaScript to convert a <BigInteger> to a
-	native value.
+	native value. Will fail if number is JavaScript unsafe (around 53 bits ~7 bytes).
 
 	Returns:
 
@@ -385,7 +392,10 @@ csBigInteger.negbigint2lehex = function (intvalue) {
 		<toString>, <toJSValue>
 */
 csBigInteger.prototype.valueOf = function() {
-  return parseInt(this.toString(), 10);
+	// convert to JavaScript number
+	var jsNum = this._data.toNumber();
+	assert(Number.isSafeInteger(jsNum), "csBigInteger assertion failed: unsafe number");
+	return jsNum; // number is safe
 };
 
 exports.csBigInteger = csBigInteger;
