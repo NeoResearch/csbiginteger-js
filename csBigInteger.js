@@ -74,7 +74,7 @@ function csBigInteger(n, base = 10) {
 		else { // (typeof n === "number")
 		  var jsNum = Math.round(n); // will round it to integer
 			assert(Number.isSafeInteger(jsNum), "csBigInteger assertion failed: unsafe number");
-			this._data = new BN(Math.round(jsNum)); // assuming JavaScript number
+			this._data = new BN(jsNum); // assuming JavaScript number
 		}
 }
 
@@ -126,29 +126,28 @@ csBigInteger.prototype.toString = function(base=10) {
 	var data = this.toByteArray();
   // allowing bases 2, 10 and 16
   if (!((base == 2) || (base == 10) || (base == 16))) {
-		throw new Error("illegal radix " + base + ".");
+		throw new Error("csBigInteger only supports bases 2, 10 or 16: unsupported base " + base + ".");
 	}
 
+  // base 10
 	if (base == 10)
 	  return this._data.toString();
 
+	// binary
+	if(base == 2)
+		return this._data.toString(2);
+
+	// base == 16
+  // big-endian hexstring
 	var shex = "";
 	for (var i = data.length - 1; i >= 0; i--) {
-
 		var sbyte = data[i].toString(16);
 		if(sbyte.length < 2)
 			sbyte = "0"+sbyte;
 		shex += sbyte;
 	}
 
-  if(base == 16) {
-    // hexstring
-    return "0x"+shex;
-  }
-	else {
-    // binary
-		return shex; // TODO
-	}
+  return "0x"+shex;
 };
 
 

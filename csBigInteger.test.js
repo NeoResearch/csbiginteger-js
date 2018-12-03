@@ -438,6 +438,12 @@ test('csBigInteger(-9007199254740992) to throw exception (number is unsafe for J
   expect( function(){ new csBigInteger(-9007199254740992).valueOf() }).toThrow(new Error("csBigInteger assertion failed: unsafe number"));
 });
 
+// ============= testing binary (basic tests) =================
+
+test('csBigInteger(10).toString(2) equals 1010', () => {
+  expect(new csBigInteger(10).toString(2)).toBe("1010");
+});
+
 // =============== testing internal BN library ===================
 
 test('csBigInteger(BN(100)) equals 100', () => {
