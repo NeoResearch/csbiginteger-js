@@ -4,12 +4,14 @@ This is **csBigInteger.js** project, a C# BigInteger implementation on JavaScrip
 The idea is to provide full compatibility with C# Numerics implementation, regarding hexstring format and little-endness.
 Some auxiliar functions are also provided, regarding Fixed8 format.
 
+Since version 3.0, it is using `bn.js` library (https://github.com/indutny/bn.js) to handle big internals.
+
 ## How to use it
 
 ### Install on web browser
 
 ```html
-<script src="https://unpkg.com/csbiginteger/dist/bundle.js"></script>
+<script src="https://unpkg.com/csbiginteger/dist/csbiginteger.js"></script>
 ```
 
 ```js
@@ -25,6 +27,15 @@ y = new csFixed8(1000);
 
 ```js
 const csBigInteger = require('csbiginteger').csBigInteger;
+var x = new csBigInteger(255);
+x.toHexString();
+// "ff00"
+var y = x + 1;
+// 256 (JS unsafe number)
+const BN = require('bn.js');
+var z = x.asBN().add(new BN(1));
+z.toString(10);
+// "256" (BN safe number)
 ```
 
 ## For Developers

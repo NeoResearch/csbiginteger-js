@@ -1,8 +1,7 @@
 // C# Big Integer implementation on javascript
 // Igor M. Coelho, Copyleft 2018 - MIT License
 // This class sketch was initially inspired by http://silentmatt.com/biginteger
-// Although the objective is not to provide top performance (C# compatibility comes first),
-// it's important to inherit a good design ;)
+// This class uses indutny 'bn.js' library to handle internal Big Number representations
 
 (function(exports) {
 "use strict";
