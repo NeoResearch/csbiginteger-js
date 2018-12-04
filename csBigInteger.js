@@ -63,15 +63,22 @@ function assert(val, msg) {
 		<parse>, <csBigInteger>
 */
 function csBigInteger(n, base = 10) {
+	  //console.log(typeof n);
 		if (n instanceof csBigInteger)
 			return n; // immutable
 		else if (typeof n === "undefined")
 			return ZERO; // empty constructor: csBigInteger()
     else if ((typeof n === "string") || (Object.prototype.toString.call(n) === '[object Array]'))
+		{
+			//console.log("WILL PARSE!!!");
       return csBigInteger.parse(n, base);
-		else if (typeof n === "BN")
+		}
+		else if (n instanceof BN) {
+			//console.log("INPUT IS BIGNUM!");
 			this._data = n; // big number
+		}
 		else { // (typeof n === "number")
+			//console.log("INPUT IS NUMBER!");
 		  var jsNum = Math.round(n); // will round it to integer
 			assert(Number.isSafeInteger(jsNum), "csBigInteger assertion failed: unsafe number");
 			this._data = new BN(jsNum); // assuming JavaScript number
@@ -189,12 +196,14 @@ csBigInteger.parse = function(n, base = 10) {
 	var s = n.toString().toLowerCase().replace(/\W-/g, '');
 
   // base 10
-  if(base == 10)
-    return new csBigInteger(new BN(s.replace(/[^0-9-]/gi, ''), 10));
+  if(base == 10) {
+		return new csBigInteger(new BN(s.replace(/[^0-9-]/gi, ''), 10));
+	}
 
   // binary
-	if(base == 2)
+	if(base == 2) {
 	  return new csBigInteger(new BN(s.replace(/[^0-1]/gi, ''), 2));
+	}
 
 	s = s.replace(/[^0-9a-fx]/gi, '');
   // base 16
