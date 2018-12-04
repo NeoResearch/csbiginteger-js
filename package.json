@@ -4,7 +4,7 @@
   "description": "csBigInteger.js: C# BigInteger implementation on javascript",
   "main": "lib/csbiginteger.js",
   "scripts": {
-    "test": "./node_modules/.bin/jest",
+    "test": "./node_modules/.bin/jest --coverage",
     "build": "./node_modules/.bin/webpack"
   },
   "repository": {
