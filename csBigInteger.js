@@ -147,6 +147,7 @@ csBigInteger.prototype.toString = function(base=10) {
 		shex += sbyte;
 	}
 
+  // big-endian hex string
   return "0x"+shex;
 };
 
@@ -172,7 +173,8 @@ csBigInteger.parse = function(n, base = 10) {
 	if(Object.prototype.toString.call(n) === '[object Array]') {
 		if(n.length == 0)
 			return ZERO;
-	  //s = "0x";
+	  // little-endian input array
+		// [251, 0] -> "fb00" -> 251
 		s = "";
 		for(var i=0;i<n.length;i++) {
 			var dig = n[i].toString(16);
@@ -181,17 +183,52 @@ csBigInteger.parse = function(n, base = 10) {
 			s = s + dig;
 		}
 		return csBigInteger.parse(s, 16);
+	} // end little-endian array
+
+	// input n is string
+	var s = n.toString().toLowerCase().replace(/\W-/g, '');
+
+  // base 10
+  if(base == 10)
+    return new csBigInteger(new BN(s.replace(/[^0-9-]/gi, ''), 10));
+
+  // binary
+	if(base == 2)
+	  return new csBigInteger(new BN(s.replace(/[^0-1]/gi, ''), 2));
+
+	s = s.replace(/[^0-9a-fx]/gi, '');
+  // base 16
+	if(s.length < 2) // single hex digit
+		return new csBigInteger(new BN(s, 16));
+
+	// verify endianess (prefix '0x' enforces big-endian, otherwise is standard 'little-endian')
+	// big-endian (must reverse to match C# standard little-endian)
+	if((s[0]=="0") && (s[1]=="x"))
+	{
+		// big-endian
+		s = s.substr(2); // remove '0x
+		// convert to little-endian
+		s = csBigInteger.revertHexString(s);
 	}
 
-	var s = n.toString();
+  // verify if number is negative (most significant bit)
+	if(csBigInteger.checkNegativeBit(s))
+	{
+			// is negative, must handle twos-complement
+			var vint = new BN(csBigInteger.revertHexString(s), 16, 'be');
+      var rbitnum = vint.toString(2);
+      // negate bits
+      var y2 = "";
+      for(var i = 0; i<rbitnum.length; i++)
+         y2 += rbitnum[i]=='0'?'1':'0';
+		  var finalnum = new BN(y2, 2).add(new BN(1)).mul(new BN(-1));
+      return new csBigInteger(finalnum);
+	}
+	else // positive is easy (assume big-endian)
+		return new csBigInteger(new BN(csBigInteger.revertHexString(s), 16, 'be'));
 
-  if(base == 10)
-    return new csBigInteger(parseInt(s, 10));
-
-	// console.log("base 16 conv:"+s);
-
-  // base 16
-	return new csBigInteger(csBigInteger.lehex2bigint(s));
+	// little-endian: BN(..., 'le') is currently with a known bug... using revertHexString instead
+	//return new csBigInteger(new BN(csBigInteger.revertHexString(s), 16, 'be'));//csBigInteger.lehex2bigint(s));
 };
 
 
@@ -226,9 +263,10 @@ csBigInteger.checkNegativeBit = function(leHexStr) {
 // hexstring to javascript big integer (TODO: beware javascript natural precision loss)
 // if prefix is "0x", considered big-endian. Example: "0x0107" is decimal 263
 // otherwise, considered little-endian. Example: "0107" is decimal 1793
+/*
 csBigInteger.lehex2bigint = function (lehex) {
   var x = lehex;
-	if((x.length >= 2) && (x[0]=="0") && (x[1]=="x")) {
+	if((x.length >= 2) && (x[0]=="0") && (x[1].toLowerCase()=="x")) {
 		// big-endian
 		x = x.substr(2);
 		// convert to little-endian
@@ -264,7 +302,7 @@ csBigInteger.lehex2bigint = function (lehex) {
     return vint;
   }
 }
-
+*/
 
 /*
 	Function: toByteArray
@@ -293,13 +331,16 @@ csBigInteger.prototype.toByteArray = function() {
 */
 csBigInteger.prototype.toHexString = function() {
 	var bigint = this._data;
-	if(bigint >= 0) {
+
+	if(!bigint.isNeg()) {
+		 // positive numbers
 		 var bihex = bigint.toString(16);
 		 if(bihex.length % 2 == 1)
 				bihex = "0"+bihex;
-		 bihex = csBigInteger.revertHexString(bihex); // to big-endian
+		 // must convert to little-endian
+		 bihex = csBigInteger.revertHexString(bihex);
 		 if(csBigInteger.checkNegativeBit(bihex))
-		 	  bihex = bihex+"00";
+		 	  bihex = bihex+"00"; // very special situations where a positive looks like negative
 		 return bihex;
 	}
 	else
