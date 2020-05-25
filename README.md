@@ -46,6 +46,9 @@ z.toString(10);
 
 ### Build Webpack
 
+Originally...
+`npm install --save-dev babel-core babel-loader babel-preset-env webpack@next webpack-cli`
+
 `npm run build`
 
 ### New minor version
