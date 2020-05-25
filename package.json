@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/NeoResearch/csBigInteger.js#readme",
   "devDependencies": {
-    "jest": "^23.6.0",
-    "webpack-cli": "^3.1.1"
+    "jest": "^26.0.1",
+    "webpack-cli": "^3.3.11"
   },
   "dependencies": {
     "bn.js": "^4.11.8",
-    "webpack": "^4.20.2"
+    "webpack": "^4.43.0"
   }
 }
