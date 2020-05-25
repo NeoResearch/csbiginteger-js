@@ -11,7 +11,7 @@ Since version 3.0, it is using `bn.js` library (https://github.com/indutny/bn.js
 ### Install on web browser
 
 ```html
-<script src="https://unpkg.com/csbiginteger/dist/csbiginteger.js"></script>
+<script src="https://unpkg.com/csbiginteger/dist/csbiginteger"></script>
 ```
 
 ```js
