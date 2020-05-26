@@ -21,8 +21,16 @@ bx3.toString(10); // outputs '4'
 
 ### Install on web browser
 
+Classic JS:
 ```html
 <script src="https://unpkg.com/csbiginteger/dist/csbiginteger"></script>
+```
+
+If you want as ES6 module:
+```html
+<script type="module">
+import csbiginteger from "https://unpkg.com/csbiginteger/dist/csbiginteger-es6";
+</script>
 ```
 
 ```js
