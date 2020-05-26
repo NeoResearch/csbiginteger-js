@@ -1,8 +1,0 @@
-{
-    "presets": [ ["es2015"] ],
-    "env":  {
-      "production": {
-        "plugins": ["transform-es2015-modules-commonjs"]
-      }
-    }
-}

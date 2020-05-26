@@ -1,15 +1,10 @@
-const EsmWebpackPlugin = require("@purtuga/esm-webpack-plugin");
 module.exports = {
     mode: "production",
     entry: "./index.js",
     output: {
       library: 'csbiginteger',
-      libraryTarget: 'var',
+      libraryTarget: 'umd',
       filename: './csbiginteger.js',
       auxiliaryComment: 'csBigInteger.js library'
-    },
-    //...
-    plugins: [
-        new EsmWebpackPlugin()
-    ]
+    }
 }

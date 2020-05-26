@@ -1,4 +1,4 @@
-const csBigInteger = require('./csBigInteger').csBigInteger;
+const csBigInteger = require('../src/csBigInteger').csBigInteger;
 const BN = require('bn.js');
 //import {csBigInteger} from './csBigInteger';
 

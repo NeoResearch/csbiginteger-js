@@ -1,3 +1,6 @@
+#final product
+dist/
+
 # Logs
 logs
 *.log
