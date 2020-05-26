@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/jest --coverage",
-    "build": "./node_modules/.bin/webpack"
+    "build": "./node_modules/.bin/webpack --config webpack.config.js && ./node_modules/.bin/webpack --config webpack-es6.config.js"
   },
   "repository": {
     "type": "git",
