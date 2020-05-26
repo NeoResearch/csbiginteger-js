@@ -1,6 +1,6 @@
 {
   "name": "csbiginteger",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "csBigInteger.js: C# BigInteger implementation on javascript",
   "main": "index.js",
   "scripts": {
