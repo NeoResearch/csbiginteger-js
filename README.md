@@ -26,10 +26,10 @@ Classic JS:
 <script src="https://unpkg.com/csbiginteger/dist/csbiginteger"></script>
 ```
 
-If you want as ES6 module:
+If you want as ES6 module (remember to put `.mjs` extension):
 ```html
 <script type="module">
-import csbiginteger from "https://unpkg.com/csbiginteger/dist/csbiginteger-es6";
+import csbiginteger from "https://unpkg.com/csbiginteger/dist/csbiginteger-es6.mjs";
 </script>
 ```
 
