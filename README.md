@@ -8,6 +8,17 @@ Since version 3.0, it is using `bn.js` library (https://github.com/indutny/bn.js
 
 ## How to use it
 
+### Example
+```js
+// get library as 'csbiginteger', e.g., CommonJS: "let csbiginteger = require('csbiginteger')"
+var x1 = new csbiginteger.csBigInteger("0xff", 16); // -1 in csBigInteger
+var bx1 = x1.asBN(); // get BN.js internals
+var x2 = new csbiginteger.csBigInteger(5);
+var bx2 = x2.asBN(); // get BN.js internals
+var bx3 = bx2.add(bx1); // performs '-1' + '5'
+bx3.toString(10); // outputs '4'
+```
+
 ### Install on web browser
 
 ```html
