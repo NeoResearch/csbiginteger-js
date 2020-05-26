@@ -55,8 +55,9 @@ test('constructor csBigInteger([251, 0]) equals 251', () => {
   expect(new csBigInteger([251, 0]).valueOf()).toBe(251);
 });
 
-test('constructor csBigInteger("fb00", 16) equals 251', () => {
-  expect(new csBigInteger("fb00", 16).valueOf()).toBe(251);
+test('constructor csBigInteger("00fb", 16) equals 251', () => {
+  expect(new csBigInteger("00fb", 16).valueOf()).toBe(251);
+  expect(new csBigInteger("00fb", 16).valueOf()).toBe(new csBigInteger("0x00fb", 16).valueOf());
 });
 
 test('constructor csBigInteger("251", 10) equals 251', () => {
@@ -374,15 +375,17 @@ test('constructor csBigInteger(-1000000).toHexString() equals "c0bdf0"', () => {
 //>>> hex(-1000000 & (2**64-1)) # 64-bit
 //'0xfffffffffff0bdc0'
 
-test('constructor csBigInteger("c0bdf0ff",16).valueOf() equals -1000000', () => {
-  expect(new csBigInteger("c0bdf0ff",16).valueOf()).toBe(-1000000);
+ 
+test('constructor csBigInteger("fff0bdc0",16).valueOf() equals -1000000', () => {
+  expect(new csBigInteger("fff0bdc0",16).valueOf()).toBe(-1000000);
+  expect(new csBigInteger("fff0bdc0",16).valueOf()).toBe(new csBigInteger("0xfff0bdc0",16).valueOf());
 });
 
-// c0bdf0ffffffffff will not work currently, because precision is not 64-bit (around ~60 bit)
+// c0bdf0ffffffffff (l.e.) will not work currently, because precision is not 64-bit (around ~60 bit)
 // So, testing will be done (for now), up to 6-bytes!
-
-test('constructor csBigInteger("c0bdf0ffffff",16).valueOf() equals -1000000', () => {
-  expect(new csBigInteger("c0bdf0ffffff",16).valueOf()).toBe(-1000000);
+test('constructor csBigInteger("fffffff0bdc0",16).valueOf() equals -1000000', () => {
+  expect(new csBigInteger("fffffff0bdc0",16).valueOf()).toBe(-1000000);
+  expect(new csBigInteger("fffffff0bdc0",16).valueOf()).toBe(new csBigInteger("0xfffffff0bdc0",16).valueOf());
 });
 
 // ====================================================================
@@ -412,8 +415,9 @@ test('constructor csBigInteger("0xfb", 16) equals -5', () => {
   expect(new csBigInteger("0xfb", 16).valueOf()).toBe(-5);
 });
 
-test('constructor csBigInteger("fb00", 16) equals 251', () => {
-  expect(new csBigInteger("fb00", 16).valueOf()).toBe(251);
+test('constructor csBigInteger("00fb", 16) equals 251', () => {
+  expect(new csBigInteger("00fb", 16).valueOf()).toBe(251);
+  expect(new csBigInteger("00fb", 16).valueOf()).toBe(new csBigInteger("0x00fb", 16).valueOf());
 });
 
 test('constructor csBigInteger("0x00fb", 16) equals 251', () => {

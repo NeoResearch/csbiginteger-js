@@ -57,12 +57,6 @@ z.toString(10);
 
 ### Build Webpack
 
-Originally...
-`npm install --save-dev babel-core babel-loader babel-preset-env webpack@next webpack-cli`
-
-Now...
-https://paultavares.wordpress.com/2018/07/02/webpack-how-to-generate-an-es-module-bundle/
-
 `npm run build`
 
 ### New minor version
